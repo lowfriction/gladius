@@ -1,0 +1,6 @@
+# Node.js modules installed through npm
+node_modules/
+
+# Preserve an empty build folder in the repositor
+build/
+!build/.gitkeep
