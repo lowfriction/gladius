@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <title>Sprite tester</title>
+  <style>
+    body {
+      margin: 1rem;
+      background: white;
+      font-family: "Droid Sans", "DejaVu Sans", sans-serif;
+    }
+
+    .Tester {
+      max-width: 30rem;
+    }
+
+    .Settings {
+    }
+
+    .Animation {
+      width: 64px;
+      height: 64px;
+    }
+  </style>
+
+  <body>
+    <div class="Tester">
+      <h1 class="Header">Sprite animation tester</h1>
+      <div class="Settings">
+        <div class="Settings-block">
+          <label for="fps-setting">FPS</label>
+          <input type="text" id="fps-setting" value="1" />
+          <input type="button" id="fps-plus" value="+" />
+          <input type="button" id="fps-minus" value="-" />
+        </div>
+      </div>
+      <div class="Animation"></div>
+    </div>
+
+    <script src="js/playground.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+
+</html>
