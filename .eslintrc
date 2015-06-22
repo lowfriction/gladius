@@ -27,7 +27,7 @@ rules:
   one-var: [2, "never"]
   no-var: [2]
   prefer-const: [2]
-  no-bitwise: [2]
+  no-bitwise: [0]
 
   object-shorthand: [2, "methods"]
   space-after-keywords: [2, "always"]
