@@ -17,7 +17,7 @@ playground({
   width: 800,
   height: 600,
   scale: 1,
-  container: document.querySelector(".Game"),
+  container: ".Game",
 
   render() {
     this.layer.clear("#272822")
