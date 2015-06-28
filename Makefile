@@ -1,31 +1,51 @@
 BABEL = ./node_modules/.bin/babel
 BROWSERIFY = ./node_modules/.bin/browserify -t babelify
 
-CLIENT_JS = $(shell find src/client/js/ -name "*.js")
-CLIENT_CSS = $(shell find src/client/css/ -name "*.css")
-SHARED = $(shell find src/shared/)
+SERVER_SRC = $(shell find src/server/ -name *.js)
+SHARED_SRC = $(shell find src/shared/ -name *.js)
+
+SERVER_DST = $(SERVER_SRC:src/server/%=build/%)
+SHARED_DST = $(SHARED_SRC:src/shared/%=build/shared/%)
 
 all: server client
 
-server: build/index.js
+server: $(SERVER_DST) $(SHARED_DST)
 
-client: build/index.html build/application.js
+$(SERVER_DST): | build-dir
+	$(BABEL) $(@:build/%=src/server/%) > $@
 
-build/index.js: src/index.js $(SHARED)
-	$(BABEL) $< > $@
+$(SHARED_DST): | shared-dir
+	$(BABEL) $(@:build/shared/%=src/shared/%) > $@
 
-build/shared/: $(SHARED)
-	rsync -ah src/shared/ $@
+client: client-html client-js
 
-build/application.js: $(CLIENT_JS) build/vendor/playground.js build/shared/
-	$(BROWSERIFY) src/client/js/index.js -o $@
+client-html: build/public/index.html
 
-build/index.html: src/client/index.html
+client-js: build/public/application.js build/public/vendor/
+
+build/public/index.html: src/client/index.html | public-dir
 	cp $< $@
 
-build/vendor/playground.js: src/client/js/vendor/playground.js
-	mkdir -p build/vendor
-	cp $< $@
+build/public/application.js: $(CLIENT_SRC) $(SHARED_SRC) | public-dir
+	$(BROWSERIFY) -t babelify src/client/js/index.js -o $@
+
+build/public/vendor/: src/client/js/vendor/ | public-dir
+	cp -r $< $@
 
 clean:
 	rm -rf build/*
+
+build-dir:
+	@ mkdir -p build/
+
+shared-dir: | build-dir
+	@ mkdir -p build/shared/
+
+public-dir: | build-dir
+	@ mkdir -p build/public/
+
+list:
+	@ echo "# Shared files:"
+	@ echo $(SHARED)
+	@ echo "# Server files:"
+	@ echo $(SERVER)
