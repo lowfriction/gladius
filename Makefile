@@ -1,5 +1,6 @@
 BABEL = ./node_modules/.bin/babel
 BROWSERIFY = ./node_modules/.bin/browserify -t babelify
+ESLINT = ./node_modules/eslint/bin/eslint.js
 
 SERVER_SRC = $(shell find src/server/ -name *.js)
 SHARED_SRC = $(shell find src/shared/ -name *.js)
@@ -49,3 +50,6 @@ list:
 	@ echo $(SHARED)
 	@ echo "# Server files:"
 	@ echo $(SERVER)
+
+check:
+	$(ESLINT) $(SERVER_SRC) $(SHARED_SRC)
