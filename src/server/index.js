@@ -18,25 +18,6 @@ class Game {
   }
 }
 
-const game = new Game()
-
-app.use(express.static(path.join(__dirname, "public")))
-
-io.on("connection", (socket) => {
-  const player = new Player()
-  const name = socket.handshake.address
-  game.players.set(name, player)
-
-  socket.on("disconnect", () => {
-    game.players.delete(name)
-  })
-  socket.on("update", () => {
-    if (game.players.has(name)) {
-      game.players.set(name, player)
-    }
-  })
-})
-
 Game.prototype.getState = function() {
   return Array.from(this.players.values())
 }
@@ -62,6 +43,25 @@ Game.prototype.loop = function() {
 
   this.onFrame(step)
 }
+
+const game = new Game()
+
+app.use(express.static(path.join(__dirname, "public")))
+
+io.on("connection", (socket) => {
+  const player = new Player()
+  const name = socket.handshake.address
+  game.players.set(name, player)
+
+  socket.on("disconnect", () => {
+    game.players.delete(name)
+  })
+  socket.on("update", () => {
+    if (game.players.has(name)) {
+      game.players.set(name, player)
+    }
+  })
+})
 
 server.listen(3000)
 
