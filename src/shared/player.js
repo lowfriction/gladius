@@ -1,3 +1,5 @@
+import {rand} from "./shared/utils"
+
 export default class Player {
   constructor(opts) {
     this.name = opts.name

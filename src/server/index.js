@@ -9,14 +9,22 @@ const app = express()
 const server = new http.Server(app)
 const io = socketio(server)
 
+class Game {
+  constructor() {
+    this.framerate = 1 / 60 * 1000
+    this.frame = null
+    this.renderer = null
+    this.players = new Map()
+  }
+}
+
 const game = new Game()
 
 app.use(express.static(path.join(__dirname, "public")))
 
-
 io.on("connection", (socket) => {
-  const player = new Player(),
-        name = socket.handshake.address
+  const player = new Player()
+  const name = socket.handshake.address
   game.players.set(name, player)
 
   socket.on("disconnect", () => {
@@ -29,31 +37,26 @@ io.on("connection", (socket) => {
   })
 })
 
-class Game {
-  constructor() {
-    this.framerate = 1/60 * 1000
-    this.frame = null
-    this.renderer = null
-    this.players = new Map()
-  }
+Game.prototype.getState = function() {
+  return Array.from(this.players.values())
 }
 
-Game.newFrame = function()
-{
+Game.prototype.newFrame = function() {
   this.frame = setTimeout(this.loop, this.framerate)
 }
 
-Game.onFrame = function(step)
-{
-  io.sockets.emit("update", Array.from(this.players.values()))
+Game.prototype.onFrame = function(step) {
+  console("onFrame " + step)
+  io.sockets.emit("update", this.getState())
 }
 
-Game.loop = function()
-{
+Game.prototype.loop = function() {
+  let now
+  let step
   this.newFrame()
 
-  var now = new Date().getTime(),
-      step = now - this.rendered
+  now = new Date().getTime()
+  step = now - this.rendered
 
   this.rendered = now
 
@@ -62,4 +65,4 @@ Game.loop = function()
 
 server.listen(3000)
 
-game.gameLoop()
+game.loop()
