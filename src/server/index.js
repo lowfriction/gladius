@@ -13,7 +13,7 @@ class Game {
   constructor() {
     this.framerate = 1 / 60 * 1000
     this.frame = null
-    this.renderer = null
+    this.rendered = null
     this.players = new Map()
   }
 }
@@ -66,3 +66,5 @@ io.on("connection", (socket) => {
 server.listen(3000)
 
 game.loop()
+
+console.log("game end ?")
