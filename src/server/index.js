@@ -27,7 +27,7 @@ Game.prototype.newFrame = function() {
 }
 
 Game.prototype.onFrame = function(step) {
-  console("onFrame " + step)
+  console.info("onFrame " + step)
   io.sockets.emit("update", this.getState())
 }
 

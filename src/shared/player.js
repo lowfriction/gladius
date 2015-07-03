@@ -1,4 +1,4 @@
-import {rand} from "./shared/utils"
+import {rand} from "./utils"
 
 export default class Player {
   constructor(opts) {
