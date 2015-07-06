@@ -23,11 +23,10 @@ Game.prototype.getState = function() {
 }
 
 Game.prototype.newFrame = function() {
-  this.frame = setTimeout(this.loop, this.framerate)
+  this.frame = setTimeout(() => this.loop(), this.framerate)
 }
 
 Game.prototype.onFrame = function(step) {
-  console.info("onFrame " + step)
   io.sockets.emit("update", this.getState())
 }
 
@@ -44,6 +43,11 @@ Game.prototype.loop = function() {
   this.onFrame(step)
 }
 
+Game.prototype.start= function() {
+  this.rendered = new Date().getTime()
+  this.loop()
+}
+
 const game = new Game()
 
 app.use(express.static(path.join(__dirname, "public")))
@@ -51,6 +55,7 @@ app.use(express.static(path.join(__dirname, "public")))
 io.on("connection", (socket) => {
   const player = new Player()
   const name = socket.handshake.address
+  console.log("new player " + player + " (" + name + ")")
   game.players.set(name, player)
 
   socket.on("disconnect", () => {
@@ -65,6 +70,4 @@ io.on("connection", (socket) => {
 
 server.listen(3000)
 
-game.loop()
-
-console.log("game end ?")
+game.start()
