@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, "public")))
 
 io.on("connection", (socket) => {
   const player = new Player()
-  const name = socket.handshake.address
+  const name = socket.id
   console.log("new player " + player + " (" + name + ")")
   gameLoop.players.set(name, player)
 
