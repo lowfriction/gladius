@@ -3,8 +3,8 @@ import express from "express"
 import http from "http"
 import socketio from "socket.io"
 
-import Player from "./shared/player"
 import GameLoop from "./game_loop"
+import Spawner from "./spawner"
 
 const app = express()
 const server = new http.Server(app)
@@ -15,18 +15,30 @@ const gameLoop = new GameLoop(io)
 app.use(express.static(path.join(__dirname, "public")))
 
 io.on("connection", (socket) => {
-  const player = new Player()
-  const name = socket.id
-  console.log("new player " + player + " (" + name + ")")
-  gameLoop.players.set(name, player)
+  socket.on("login", (data) => {
+    const name = data.name
+    const player = Spawner.createPlayer(name)
+    const id = socket.id
+    console.log("new player " + player + " (" + name + ")")
+    gameLoop.players.set(id, player)
 
-  socket.on("disconnect", () => {
-    gameLoop.players.delete(name)
-  })
-  socket.on("update", () => {
-    if (gameLoop.players.has(name)) {
-      gameLoop.players.set(name, player)
-    }
+    socket.on("update", () => {
+      if (gameLoop.players.has(id)) {
+        gameLoop.players.set(id, player)
+      }
+    })
+
+    socket.on("keydown", (key) => {
+      player.inputState.keydown(key)
+    })
+
+    socket.on("keyup", (key) => {
+      player.inputState.keyup(key)
+    })
+
+    socket.on("disconnect", () => {
+      gameLoop.players.delete(id)
+    })
   })
 })
 

@@ -3,6 +3,7 @@ BROWSERIFY = ./node_modules/.bin/browserify -t babelify
 ESLINT = ./node_modules/eslint/bin/eslint.js
 
 SERVER_SRC = $(shell find src/server/ -name *.js)
+CLIENT_SRC = $(shell find src/client/ -name *.js)
 SHARED_SRC = $(shell find src/shared/ -name *.js)
 
 SERVER_DST = $(SERVER_SRC:src/server/%=build/%)
@@ -12,11 +13,11 @@ all: server client
 
 server: $(SERVER_DST) $(SHARED_DST)
 
-$(SERVER_DST): | build-dir
-	$(BABEL) $(@:build/%=src/server/%) > $@
+$(SERVER_DST): $(SERVER_SRC) | build-dir
+	$(BABEL) $(@:build/%=src/server/%) -o $@
 
-$(SHARED_DST): | shared-dir
-	$(BABEL) $(@:build/shared/%=src/shared/%) > $@
+$(SHARED_DST): $(SHARED_SRC) | shared-dir
+	$(BABEL) $(@:build/shared/%=src/shared/%) -o $@
 
 client: client-html client-js
 
