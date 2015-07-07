@@ -26,24 +26,31 @@ export default class GameLoop {
     const currentState = this.getState()
 
     for (const player of currentState) {
+      let dX = 0
+      let dY = 0
       if (player.inputState.isPushed("space")) {
         player.speed += 0.1
       }
       if (player.inputState.isPushed("up")) {
-        player.y -= delta * 0.25 * player.speed
+        dY = - delta * 0.25 * player.speed
       }
       if (player.inputState.isPushed("down")) {
-        player.y += delta * 0.25 * player.speed
+        dY = delta * 0.25 * player.speed
       }
       if (player.inputState.isPushed("left")) {
-        player.x -= delta * 0.25 * player.speed
+        dX = - delta * 0.25 * player.speed
       }
       if (player.inputState.isPushed("right")) {
-        player.x += delta * 0.25 * player.speed
+        dX = delta * 0.25 * player.speed
       }
 
-      player.x = Math.min(WIDTH, Math.max(0, player.x))
-      player.y = Math.min(HEIGHT, Math.max(0, player.y))
+      if (player.inputState.isDiagonal()) {
+        dX /= Math.SQRT2
+        dY /= Math.SQRT2
+      }
+
+      player.x = Math.min(WIDTH, Math.max(0, player.x + dX))
+      player.y = Math.min(HEIGHT, Math.max(0, player.y + dY))
     }
   }
 

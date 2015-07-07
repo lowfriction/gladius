@@ -14,4 +14,9 @@ export default class InputState {
   isPushed(key) {
     return this.state[key] || false
   }
+
+  isDiagonal() {
+    return ((this.state.up && (this.state.left || this.state.right)) ||
+            (this.state.down && (this.state.left || this.state.right)))
+  }
 }
