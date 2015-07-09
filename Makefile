@@ -19,14 +19,19 @@ $(SERVER_DST): $(SERVER_SRC) | build-dir
 $(SHARED_DST): $(SHARED_SRC) | shared-dir
 	$(BABEL) $(@:build/shared/%=src/shared/%) -o $@
 
-client: client-html client-js
+client: client-html client-js client-assets
 
 client-html: build/public/index.html
 
 client-js: build/public/application.js build/public/vendor/
 
+client-assets: build/public/assets/
+
 build/public/index.html: src/client/index.html | public-dir
 	cp $< $@
+
+build/public/assets/: src/client/assets/ | public-dir
+	cp -r $< $@
 
 build/public/application.js: $(CLIENT_SRC) $(SHARED_SRC) | public-dir
 	$(BROWSERIFY) -t babelify src/client/js/index.js -o $@

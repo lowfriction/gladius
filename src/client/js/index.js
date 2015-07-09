@@ -1,6 +1,6 @@
 /*global playground*/
 import socketio from "socket.io-client"
-import {WIDTH, HEIGHT, HALF_SPRITE_SIZE} from "../../shared/constants"
+import {WIDTH, HEIGHT, SPRITE_SIZE, HALF_SPRITE_SIZE} from "../../shared/constants"
 
 const name = prompt("Name")
 
@@ -24,6 +24,14 @@ playground({
   scale: 1,
   container: ".Game",
 
+  paths: {
+    base: "assets/",
+  },
+
+  create() {
+    this.loadImages("character")
+  },
+
   render() {
     this.layer.clear("#272822")
 
@@ -31,7 +39,13 @@ playground({
       const labelWidth = this.layer.textBoundaries(player.name).width
       this.layer
         .fillStyle("#efefef")
-        .fillCircle(player.x, player.y, HALF_SPRITE_SIZE)
+        .fillRect(player.x - HALF_SPRITE_SIZE, player.y - HALF_SPRITE_SIZE,
+                  SPRITE_SIZE, SPRITE_SIZE)
+        .save()
+        .translate(player.x, player.y)
+        .align(0.5, 0.5)
+        .drawImage(this.images.character, 0, 0)
+        .restore()
         .fillText(player.name,
                   player.x - labelWidth / 2,
                   player.y - HALF_SPRITE_SIZE - this.layer.fontHeight())
