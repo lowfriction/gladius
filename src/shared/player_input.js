@@ -1,4 +1,4 @@
-export default class InputState {
+export default class PlayerInput {
   constructor() {
     this.state = {}
   }

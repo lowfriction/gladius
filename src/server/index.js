@@ -29,11 +29,11 @@ io.on("connection", (socket) => {
     })
 
     socket.on("keydown", (key) => {
-      player.inputState.keydown(key)
+      player.input.keydown(key)
     })
 
     socket.on("keyup", (key) => {
-      player.inputState.keyup(key)
+      player.input.keyup(key)
     })
 
     socket.on("disconnect", () => {
