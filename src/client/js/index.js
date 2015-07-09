@@ -1,4 +1,4 @@
-/*global playground*/
+/*global playground, PLAYGROUND*/
 import socketio from "socket.io-client"
 import {WIDTH, HEIGHT, SPRITE_SIZE, HALF_SPRITE_SIZE} from "../../shared/constants"
 
