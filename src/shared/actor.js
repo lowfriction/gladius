@@ -9,4 +9,8 @@ export default class Actor {
     this.x = x
     this.y = y
   }
+
+  update() {
+    // Do nothing by default
+  }
 }
