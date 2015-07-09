@@ -39,11 +39,10 @@ playground({
       const labelWidth = this.layer.textBoundaries(player.name).width
       this.layer
         .fillStyle("#efefef")
-        .fillRect(player.x - HALF_SPRITE_SIZE, player.y - HALF_SPRITE_SIZE,
-                  SPRITE_SIZE, SPRITE_SIZE)
         .save()
         .translate(player.x, player.y)
         .align(0.5, 0.5)
+        .rotate(player.direction * -Math.PI / 4)
         .drawImage(this.images.character, 0, 0)
         .restore()
         .fillText(player.name,

@@ -1,4 +1,4 @@
-import {WIDTH, HEIGHT} from "./constants"
+import {WIDTH, HEIGHT, Direction, COMPASS} from "./constants"
 import Actor from "./actor"
 import PlayerInput from "./player_input"
 
@@ -6,6 +6,7 @@ export default class Player extends Actor {
   constructor(opts = {}) {
     super(opts)
     this.name = opts.name
+    this.direction = Direction.NORTH
     this.input = new PlayerInput()
   }
 
@@ -33,7 +34,19 @@ export default class Player extends Actor {
       dY /= Math.SQRT2
     }
 
+    this.setDirection(dX, dY)
+
     this.x = ~~(Math.min(WIDTH, Math.max(0, this.x + dX)))
     this.y = ~~(Math.min(HEIGHT, Math.max(0, this.y + dY)))
+  }
+
+  setDirection(dX, dY) {
+    const xDir = 1 + (dX / Math.abs(dX) || 0)
+    const yDir = 1 + (dY / Math.abs(dY) || 0)
+    const newDirection = COMPASS[yDir][xDir]
+
+    if (newDirection !== null) {
+      this.direction = newDirection
+    }
   }
 }
