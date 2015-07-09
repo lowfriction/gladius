@@ -1,6 +1,6 @@
 /*global playground, PLAYGROUND*/
 import socketio from "socket.io-client"
-import {WIDTH, HEIGHT, SPRITE_SIZE, HALF_SPRITE_SIZE} from "../../shared/constants"
+import {WIDTH, HEIGHT, HALF_SPRITE_SIZE} from "../../shared/constants"
 
 PLAYGROUND.Transitions.plugin = false
 
@@ -54,10 +54,12 @@ playground({
   },
 
   keydown(ev) {
-    socket.emit("keydown", ev.key)
+    // TODO: We need to use a keyboard mapping to send the right input types
+    socket.emit("input:press", {type: ev.key})
   },
 
   keyup(ev) {
-    socket.emit("keyup", ev.key)
+    // TODO: We need to use a keyboard mapping to send the right input types
+    socket.emit("input:release", {type: ev.key})
   },
 })

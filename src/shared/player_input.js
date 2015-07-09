@@ -1,14 +1,25 @@
 export default class PlayerInput {
   constructor() {
-    this.state = {}
+    this.state = {
+      up: false,
+      down: false,
+      left: false,
+      right: false,
+      primary: false,
+      secondary: false,
+      ternary: false,
+      taunt: false,
+      dash: false,
+      lockDirection: false,
+    }
   }
 
-  keydown(key) {
-    this.state[key] = true
+  press(type) {
+    this.state[type] = true
   }
 
-  keyup(key) {
-    this.state[key] = false
+  release(type) {
+    this.state[type] = false
   }
 
   isPushed(key) {

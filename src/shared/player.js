@@ -13,6 +13,7 @@ export default class Player extends Actor {
   update(delta) {
     let dX = 0
     let dY = 0
+
     if (this.input.isPushed("up")) {
       dY = -(delta * 0.25 * this.speed)
     }

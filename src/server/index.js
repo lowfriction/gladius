@@ -28,12 +28,12 @@ io.on("connection", (socket) => {
       }
     })
 
-    socket.on("keydown", (key) => {
-      player.input.keydown(key)
+    socket.on("input:press", (input) => {
+      player.input.press(input.type)
     })
 
-    socket.on("keyup", (key) => {
-      player.input.keyup(key)
+    socket.on("input:release", (input) => {
+      player.input.release(input.type)
     })
 
     socket.on("disconnect", () => {
