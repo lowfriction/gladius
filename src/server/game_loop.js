@@ -49,8 +49,8 @@ export default class GameLoop {
         dY /= Math.SQRT2
       }
 
-      player.x = Math.min(WIDTH, Math.max(0, player.x + dX))
-      player.y = Math.min(HEIGHT, Math.max(0, player.y + dY))
+      player.x = ~~(Math.min(WIDTH, Math.max(0, player.x + dX)))
+      player.y = ~~(Math.min(HEIGHT, Math.max(0, player.y + dY)))
     }
   }
 
