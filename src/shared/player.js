@@ -26,7 +26,7 @@ export default class Player extends Actor {
       dX = delta * 0.25 * this.speed
     }
 
-    if (this.input.isDiagonal()) {
+    if (dX !== 0 && dY !== 0) {
       dX /= Math.SQRT2
       dY /= Math.SQRT2
     }
