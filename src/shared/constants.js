@@ -14,6 +14,16 @@ export const Direction = {
   NORTH_EAST: 7,
 }
 
+export const State = {
+  IDLE: 0,
+  WALK: 1,
+  RUN: 2,
+  PRIMARY: 3,
+  SECONDARY: 4,
+  TERNARY: 5,
+  TAUNT: 6,
+}
+
 export const COMPASS = [
   [Direction.NORTH_WEST, Direction.NORTH, Direction.NORTH_EAST],
   [Direction.WEST, null, Direction.EAST],

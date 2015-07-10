@@ -1,4 +1,4 @@
-import {WIDTH, HEIGHT, Direction, COMPASS} from "./constants"
+import {WIDTH, HEIGHT, Direction, State, COMPASS} from "./constants"
 import Actor from "./actor"
 import PlayerInput from "./player_input"
 
@@ -8,6 +8,7 @@ export default class Player extends Actor {
     this.name = opts.name
     this.direction = Direction.NORTH
     this.input = new PlayerInput()
+    this.state = State.IDLE
   }
 
   update(delta) {
@@ -34,8 +35,13 @@ export default class Player extends Actor {
 
     this.setDirection(dX, dY)
 
-    this.x = ~~(Math.min(WIDTH, Math.max(0, this.x + dX)))
-    this.y = ~~(Math.min(HEIGHT, Math.max(0, this.y + dY)))
+    if (dX !== 0 || dY !== 0) {
+      this.state = State.WALK
+      this.x = ~~(Math.min(WIDTH, Math.max(0, this.x + dX)))
+      this.y = ~~(Math.min(HEIGHT, Math.max(0, this.y + dY)))
+    } else {
+      this.state = State.IDLE
+    }
   }
 
   setDirection(dX, dY) {
