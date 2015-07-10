@@ -44,6 +44,7 @@ var app = new PLAYGROUND.Application({
   ready: function() {
     this.spriteSize = this.images.sprite.height
     this.frameCount = this.images.sprite.width / this.spriteSize
+    this.width = this.height = this.spriteSize
   },
 
   render: function() {
