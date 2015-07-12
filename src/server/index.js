@@ -22,9 +22,6 @@ io.on("connection", (socket) => {
     console.log("new player " + player + " (" + name + ")")
     gameLoop.players.set(id, player)
 
-    socket.on("update", () => {
-    })
-
     socket.on("input:press", (input) => {
       player.input.press(input.type)
     })
