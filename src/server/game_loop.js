@@ -22,7 +22,7 @@ export default class GameLoop {
       actor.update(delta)
     }
 
-    this.io.sockets.emit("update", this.getState())
+    this.io.sockets.emit("actor:update", this.getState())
   }
 
   loop() {

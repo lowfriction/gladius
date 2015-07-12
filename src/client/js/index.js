@@ -10,14 +10,23 @@ let playerStates = []
 
 const socket = socketio()
 
-socket.emit("login", {name})
+socket.emit("join", {name})
 
-socket.on("update", (state) => {
+socket.on("actor:update", (state) => {
   playerStates = state
 })
 
-socket.on("join", (newPlayer) => {
+socket.on("error", (error) => {
+})
+
+socket.on("worldstate", (world) => {
+})
+
+socket.on("actor:create", (newPlayer) => {
   playerStates.push(newPlayer)
+})
+
+socket.on("actor:remove", (player) => {
 })
 
 playground({
