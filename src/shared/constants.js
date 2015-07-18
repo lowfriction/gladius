@@ -31,7 +31,7 @@ export const DefaultBindings = [
   ["d", "right"],
   ["a", "primary"],
   ["e", "secondary"],
-  ["r", "termary"],
+  ["r", "ternary"],
   ["f", "taunt"],
   ["alt", "dash"],
   ["space", "lockDirection"],
