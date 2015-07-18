@@ -1,12 +1,14 @@
 /*global playground, PLAYGROUND*/
 import socketio from "socket.io-client"
 import {WIDTH, HEIGHT, HALF_SPRITE_SIZE} from "../../shared/constants"
+import PlayerBindings from "./player_bindings"
 
 PLAYGROUND.Transitions.plugin = false
 
 const name = prompt("Name")
 
 let playerStates = []
+let playerBindings = new PlayerBindings()
 
 const socket = socketio()
 
@@ -63,12 +65,16 @@ playground({
   },
 
   keydown(ev) {
-    // TODO: We need to use a keyboard mapping to send the right input types
-    socket.emit("input:press", {type: ev.key})
+    const action = playerBindings.getAction(ev.key)
+    if (typeof action != undefined) {
+      socket.emit("input:press", {type: action})
+    }
   },
 
   keyup(ev) {
-    // TODO: We need to use a keyboard mapping to send the right input types
-    socket.emit("input:release", {type: ev.key})
+    const action = playerBindings.getAction(ev.key)
+    if (typeof action != undefined) {
+      socket.emit("input:release", {type: action})
+    }
   },
 })

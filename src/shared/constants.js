@@ -19,3 +19,20 @@ export const COMPASS = [
   [Direction.WEST, null, Direction.EAST],
   [Direction.SOUTH_WEST, Direction.SOUTH, Direction.SOUTH_EAST],
 ]
+
+export const DefaultBindings = [
+  ["up", "up"],
+  ["z", "up"],
+  ["down", "down"],
+  ["s", "down"],
+  ["left", "left"],
+  ["q", "left"],
+  ["right", "right"],
+  ["d", "right"],
+  ["a", "primary"],
+  ["e", "secondary"],
+  ["r", "termary"],
+  ["f", "taunt"],
+  ["alt", "dash"],
+  ["space", "lockDirection"],
+]
