@@ -96,4 +96,18 @@ playground({
       socket.emit("input:release", {type: action})
     }
   },
+
+  gamepaddown(ev) {
+    const action = playerBindings.getAction(ev.button)
+    if (typeof action != undefined) {
+      socket.emit("input:press", {type: action})
+    }
+  },
+
+  gamepadup(ev) {
+    const action = playerBindings.getAction(ev.button)
+    if (typeof action != undefined) {
+      socket.emit("input:release", {type: action})
+    }
+  }
 })
