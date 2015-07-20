@@ -85,29 +85,33 @@ playground({
 
   keydown(ev) {
     const action = playerBindings.getAction(ev.key)
-    if (typeof action != undefined) {
+
+    if (action) {
       socket.emit("input:press", {type: action})
     }
   },
 
   keyup(ev) {
     const action = playerBindings.getAction(ev.key)
-    if (typeof action != undefined) {
+
+    if (action) {
       socket.emit("input:release", {type: action})
     }
   },
 
   gamepaddown(ev) {
     const action = playerBindings.getAction(ev.button)
-    if (typeof action != undefined) {
+
+    if (action) {
       socket.emit("input:press", {type: action})
     }
   },
 
   gamepadup(ev) {
     const action = playerBindings.getAction(ev.button)
-    if (typeof action != undefined) {
+
+    if (action) {
       socket.emit("input:release", {type: action})
     }
-  }
+  },
 })
