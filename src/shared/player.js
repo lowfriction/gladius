@@ -1,4 +1,4 @@
-import {WIDTH, HEIGHT, Direction, State, COMPASS} from "./constants"
+import {MAP_WIDTH, MAP_HEIGHT, Direction, State, COMPASS} from "./constants"
 import Actor from "./actor"
 import PlayerInput from "./player_input"
 
@@ -37,10 +37,18 @@ export default class Player extends Actor {
 
     if (dX !== 0 || dY !== 0) {
       this.state = State.WALK
-      this.x = ~~(Math.min(WIDTH, Math.max(0, this.x + dX)))
-      this.y = ~~(Math.min(HEIGHT, Math.max(0, this.y + dY)))
+      this.x = ~~(Math.min(MAP_WIDTH, Math.max(0, this.x + dX)))
+      this.y = ~~(Math.min(MAP_HEIGHT, Math.max(0, this.y + dY)))
     } else {
       this.state = State.IDLE
+    }
+
+    return {
+      name: this.name,
+      x: this.x,
+      y: this.y,
+      state: this.state,
+      direction: this.direction,
     }
   }
 

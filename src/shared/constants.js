@@ -1,3 +1,5 @@
+export const MAP_WIDTH = 1000
+export const MAP_HEIGHT = 1000
 export const WIDTH = 800
 export const HEIGHT = 600
 export const SPRITE_SIZE = 32

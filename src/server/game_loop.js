@@ -17,12 +17,13 @@ export default class GameLoop {
 
   onFrame(delta) {
     const currentState = this.getState()
+    const updates = []
 
     for (const actor of currentState) {
-      actor.update(delta)
+      updates.push(actor.update(delta))
     }
 
-    this.io.sockets.emit("actor:update", this.getState())
+    this.io.sockets.emit("actor:update", updates)
   }
 
   loop() {

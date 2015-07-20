@@ -1,14 +1,21 @@
 /*global playground, PLAYGROUND*/
 import socketio from "socket.io-client"
-import {WIDTH, HEIGHT, SPRITE_SIZE, HALF_SPRITE_SIZE, State} from "../../shared/constants"
+import {
+  WIDTH, HEIGHT,
+  MAP_WIDTH, MAP_HEIGHT,
+  SPRITE_SIZE, HALF_SPRITE_SIZE,
+  State}
+  from "../../shared/constants"
 import PlayerBindings from "./player_bindings"
 
 PLAYGROUND.Transitions.plugin = false
 
 const name = prompt("Name")
 
+const playerBindings = new PlayerBindings()
+
 let playerStates = []
-let playerBindings = new PlayerBindings()
+let me = null
 
 const socket = socketio()
 
@@ -16,12 +23,21 @@ socket.emit("join", {name})
 
 socket.on("actor:update", (state) => {
   playerStates = state
+
+  // XXX: UGLY
+  for (const player of playerStates) {
+    if (player.name === name) {
+      me = player
+      break
+    }
+  }
 })
 
 socket.on("error", (error) => {
 })
 
 socket.on("worldstate", (world) => {
+  playerStates = world
 })
 
 socket.on("actor:create", (newPlayer) => {
@@ -46,9 +62,36 @@ playground({
   },
 
   render() {
+    // Render map
+    const viewport = {
+      x: me ? me.x - WIDTH / 2 : MAP_WIDTH / 2 - WIDTH / 2,
+      y: me ? me.y - HEIGHT / 2 : MAP_HEIGHT / 2 - HEIGHT / 2,
+    }
     this.layer.clear("#272822")
+    if (viewport.x < 0) {
+      this.layer.fillStyle("black").fillRect(0, 0, -(viewport.x), HEIGHT)
+    }
+    if (viewport.x + WIDTH > MAP_WIDTH) {
+      const w = MAP_WIDTH - viewport.x
+      this.layer.fillStyle("black").fillRect(w, 0, w, HEIGHT)
+    }
+    if (viewport.y < 0) {
+      this.layer.fillStyle("black").fillRect(0, 0, WIDTH, -(viewport.y))
+    }
+    if (viewport.y + HEIGHT > MAP_HEIGHT) {
+      const h = MAP_HEIGHT - viewport.y
+      this.layer.fillStyle("black").fillRect(0, h, WIDTH, h)
+    }
 
+    // Render players
     for (const player of playerStates) {
+      if (player.x < viewport.x - SPRITE_SIZE ||
+          player.x > viewport.x + WIDTH + SPRITE_SIZE ||
+          player.y < viewport.y - SPRITE_SIZE ||
+          player.y > viewport.y + HEIGHT + SPRITE_SIZE) {
+        continue
+      }
+
       const labelWidth = this.layer.textBoundaries(player.name).width
       const spriteName = player.state === State.WALK ? "character-walk" : "character"
       const sprite = this.images[spriteName]
@@ -72,14 +115,14 @@ playground({
       this.layer
         .fillStyle("#efefef")
         .save()
-        .translate(player.x, player.y)
+        .translate(player.x - viewport.x, player.y - viewport.y)
         .align(0.5, 0.5)
         .rotate(player.direction * -Math.PI / 4)
         .drawImage(...spriteArgs)
         .restore()
         .fillText(player.name,
-                  player.x - labelWidth / 2,
-                  player.y - HALF_SPRITE_SIZE - this.layer.fontHeight())
+                  player.x - labelWidth / 2 - viewport.x,
+                  player.y - HALF_SPRITE_SIZE - this.layer.fontHeight() - viewport.y)
     }
   },
 

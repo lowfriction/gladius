@@ -15,36 +15,34 @@ const gameLoop = new GameLoop(io)
 app.use(express.static(path.join(__dirname, "public")))
 
 io.on("connection", (socket) => {
-  socket.on("join", (data) => {
-    const name = data.name
+  const id = socket.id
+
+  socket.on("input:press", (input) => {
+    const player = gameLoop.players.get(id)
+
+    player.input.press(input.type)
+  })
+
+  socket.on("input:release", (input) => {
+    const player = gameLoop.players.get(id)
+
+    player.input.release(input.type)
+  })
+
+  socket.on("join", (playerInfo) => {
+    const name = playerInfo.name
     const player = Spawner.createPlayer(name)
-    const id = socket.id
-    console.log("new player " + player + " (" + name + ")")
+
+    console.log("new player (" + name + ")")
+    console.log(playerInfo)
+
     gameLoop.players.set(id, player)
 
-    socket.on("input:press", (input) => {
-      player.input.press(input.type)
-    })
+    socket.emit("worldstate", gameLoop.getState())
+  })
 
-    socket.on("input:release", (input) => {
-      player.input.release(input.type)
-    })
-
-    socket.on("actor:create", (input) => {
-    })
-
-    socket.on("actor:remove", (input) => {
-    })
-
-    socket.on("actor:update", () => {
-      if (gameLoop.players.has(id)) {
-        gameLoop.players.set(id, player)
-      }
-    })
-
-    socket.on("disconnect", () => {
-      gameLoop.players.delete(id)
-    })
+  socket.on("disconnect", () => {
+    gameLoop.players.delete(id)
   })
 })
 
