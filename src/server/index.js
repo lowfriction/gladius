@@ -2,6 +2,7 @@ import path from "path"
 import express from "express"
 import http from "http"
 import socketio from "socket.io"
+import morgan from "morgan"
 
 import GameLoop from "./game_loop"
 import Spawner from "./spawner"
@@ -13,6 +14,9 @@ const io = socketio(server)
 const gameLoop = new GameLoop(io)
 
 app.use(express.static(path.join(__dirname, "public")))
+
+// Logging
+app.use(morgan("dev"))
 
 io.on("connection", (socket) => {
   const id = socket.id
