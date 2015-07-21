@@ -28,6 +28,7 @@ rules:
   no-var: [2]
   prefer-const: [2]
   no-bitwise: [0]
+  no-alert: [0]
 
   object-shorthand: [2, "methods"]
   space-after-keywords: [2, "always"]

@@ -1,4 +1,10 @@
 /*global playground, PLAYGROUND*/
+
+import "../index.html"
+import "../assets/images/character.png"
+import "../assets/images/character-walk.png"
+import "!file?name=vendor/[name].js!./vendor/playground.js"
+
 import socketio from "socket.io-client"
 import {
   WIDTH, HEIGHT,
@@ -33,7 +39,7 @@ socket.on("actor:update", (state) => {
   }
 })
 
-socket.on("error", (error) => {
+socket.on("error", () => {
 })
 
 socket.on("worldstate", (world) => {
@@ -44,7 +50,7 @@ socket.on("actor:create", (newPlayer) => {
   playerStates.push(newPlayer)
 })
 
-socket.on("actor:remove", (player) => {
+socket.on("actor:remove", () => {
 })
 
 playground({
@@ -93,7 +99,8 @@ playground({
       }
 
       const labelWidth = this.layer.textBoundaries(player.name).width
-      const spriteName = player.state === State.WALK ? "character-walk" : "character"
+      const spriteName = player.state === State.WALK ?
+        "character-walk" : "character"
       const sprite = this.images[spriteName]
       let spriteArgs
 
@@ -112,6 +119,10 @@ playground({
       }
 
       // this.images.character, 0, 0)
+      const textPos = {
+        x: player.x - labelWidth / 2 - viewport.x,
+        y: player.y - HALF_SPRITE_SIZE - this.layer.fontHeight() - viewport.y,
+      }
       this.layer
         .fillStyle("#efefef")
         .save()
@@ -120,9 +131,7 @@ playground({
         .rotate(player.direction * -Math.PI / 4)
         .drawImage(...spriteArgs)
         .restore()
-        .fillText(player.name,
-                  player.x - labelWidth / 2 - viewport.x,
-                  player.y - HALF_SPRITE_SIZE - this.layer.fontHeight() - viewport.y)
+        .fillText(player.name, textPos.x, textPos.y)
     }
   },
 
