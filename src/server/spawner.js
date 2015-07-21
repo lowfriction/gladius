@@ -1,6 +1,6 @@
-import {WIDTH, HEIGHT, HALF_SPRITE_SIZE} from "./shared/constants"
-import {rand} from "./shared/utils"
-import Player from "./shared/player"
+import {WIDTH, HEIGHT, HALF_SPRITE_SIZE} from "../shared/constants"
+import {rand} from "../shared/utils"
+import Player from "../shared/player"
 
 const Spawner = {
   createPlayer(name) {
