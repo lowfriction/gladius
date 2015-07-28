@@ -1,25 +1,22 @@
+const FRAMERATE = 1 / 60 * 1000
+
 export default class GameLoop {
-  constructor(io) {
+  constructor(io, game) {
     this.io = io
-    this.framerate = 1 / 60 * 1000
+    this.game = game
     this.frame = null
     this.rendered = null
-    this.players = new Map()
-  }
-
-  getState() {
-    return Array.from(this.players.values())
   }
 
   newFrame() {
-    this.frame = setTimeout(() => this.loop(), this.framerate)
+    this.frame = setTimeout(() => this.loop(), FRAMERATE)
   }
 
   onFrame(delta) {
-    const currentState = this.getState()
+    const actors = this.game.getActors()
     const updates = []
 
-    for (const actor of currentState) {
+    for (const actor of actors) {
       updates.push(actor.update(delta))
     }
 

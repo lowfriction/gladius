@@ -1,5 +1,6 @@
 export default class Actor {
   constructor(opts = {}) {
+    this.id = opts.id
     this.x = opts.x || 0
     this.y = opts.y || 0
     this.speed = opts.speed || 1

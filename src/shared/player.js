@@ -44,6 +44,7 @@ export default class Player extends Actor {
     }
 
     return {
+      id: this.id,
       name: this.name,
       x: this.x,
       y: this.y,

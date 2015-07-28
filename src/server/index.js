@@ -7,11 +7,15 @@ import morgan from "morgan"
 import GameLoop from "./game_loop"
 import Spawner from "./spawner"
 
+import Game from "../shared/game"
+
 const app = express()
 const server = new http.Server(app)
 const io = socketio(server)
 
-const gameLoop = new GameLoop(io)
+const game = new Game()
+const gameLoop = new GameLoop(io, game)
+const players = new Map()
 
 app.use(express.static(path.join(__dirname, "public")))
 
@@ -19,34 +23,36 @@ app.use(express.static(path.join(__dirname, "public")))
 app.use(morgan("dev"))
 
 io.on("connection", (socket) => {
-  const id = socket.id
+  const socketId = socket.id
+  console.warn(socket.id)
 
   socket.on("input:press", (input) => {
-    const player = gameLoop.players.get(id)
+    const player = players.get(socketId)
 
     player.input.press(input.type)
   })
 
   socket.on("input:release", (input) => {
-    const player = gameLoop.players.get(id)
+    const player = players.get(socketId)
 
     player.input.release(input.type)
   })
 
   socket.on("join", (playerInfo) => {
     const name = playerInfo.name
-    const player = Spawner.createPlayer(name)
+    const player = Spawner.createPlayer(socketId, name)
 
     console.log("new player (" + name + ")")
     console.log(playerInfo)
 
-    gameLoop.players.set(id, player)
+    players.set(socketId, player)
+    game.actors.push(player)
 
-    socket.emit("worldstate", gameLoop.getState())
+    socket.emit("worldstate", game.getActors())
   })
 
   socket.on("disconnect", () => {
-    gameLoop.players.delete(id)
+    players.delete(socketId)
   })
 })
 

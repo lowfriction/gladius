@@ -5,49 +5,51 @@ import "../assets/images/character.png"
 import "../assets/images/character-walk.png"
 import "!file?name=vendor/[name].js!./vendor/playground.js"
 
+import {WIDTH, HEIGHT} from "../../shared/constants"
+
 import socketio from "socket.io-client"
-import {
-  WIDTH, HEIGHT,
-  MAP_WIDTH, MAP_HEIGHT,
-  SPRITE_SIZE, HALF_SPRITE_SIZE,
-  State}
-  from "../../shared/constants"
+import Game from "../../shared/game"
 import PlayerBindings from "./player_bindings"
+import Renderer from "./renderer"
 
 PLAYGROUND.Transitions.plugin = false
 
 const name = prompt("Name")
 
 const playerBindings = new PlayerBindings()
-
-let playerStates = []
-let me = null
+const game = new Game()
 
 const socket = socketio()
 
+let me = null
+
 socket.emit("join", {name})
 
-socket.on("actor:update", (state) => {
-  playerStates = state
-
-  // XXX: UGLY
-  for (const player of playerStates) {
-    if (player.name === name) {
-      me = player
-      break
+socket.on("actor:update", (actors) => {
+  for (const actor of actors) {
+    if (actor.id === socket.id) {
+      me = actor
     }
   }
+
+  game.setActors(actors)
 })
 
 socket.on("error", () => {
 })
 
-socket.on("worldstate", (world) => {
-  playerStates = world
+socket.on("worldstate", (actors) => {
+  for (const actor of actors) {
+    if (actor.id === socket.id) {
+      me = actor
+    }
+  }
+
+  game.setActors(actors)
 })
 
 socket.on("actor:create", (newPlayer) => {
-  playerStates.push(newPlayer)
+  game.getActors().push(newPlayer)
 })
 
 socket.on("actor:remove", () => {
@@ -65,73 +67,15 @@ playground({
 
   create() {
     this.loadImages("character", "character-walk")
+    this.renderer = new Renderer()
   },
 
   render() {
-    // Render map
-    const viewport = {
-      x: me ? me.x - WIDTH / 2 : MAP_WIDTH / 2 - WIDTH / 2,
-      y: me ? me.y - HEIGHT / 2 : MAP_HEIGHT / 2 - HEIGHT / 2,
-    }
-    this.layer.clear("#272822")
-    if (viewport.x < 0) {
-      this.layer.fillStyle("black").fillRect(0, 0, -(viewport.x), HEIGHT)
-    }
-    if (viewport.x + WIDTH > MAP_WIDTH) {
-      const w = MAP_WIDTH - viewport.x
-      this.layer.fillStyle("black").fillRect(w, 0, w, HEIGHT)
-    }
-    if (viewport.y < 0) {
-      this.layer.fillStyle("black").fillRect(0, 0, WIDTH, -(viewport.y))
-    }
-    if (viewport.y + HEIGHT > MAP_HEIGHT) {
-      const h = MAP_HEIGHT - viewport.y
-      this.layer.fillStyle("black").fillRect(0, h, WIDTH, h)
-    }
-
-    // Render players
-    for (const player of playerStates) {
-      if (player.x < viewport.x - SPRITE_SIZE ||
-          player.x > viewport.x + WIDTH + SPRITE_SIZE ||
-          player.y < viewport.y - SPRITE_SIZE ||
-          player.y > viewport.y + HEIGHT + SPRITE_SIZE) {
-        continue
-      }
-
-      const labelWidth = this.layer.textBoundaries(player.name).width
-      const spriteName = player.state === State.WALK ?
-        "character-walk" : "character"
-      const sprite = this.images[spriteName]
-      let spriteArgs
-
-      switch (player.state) {
-        case State.IDLE:
-          spriteArgs = [sprite, 0, 0]
-          break
-        case State.WALK:
-          const frame = (this.lifetime * 12) % 8 | 0
-          spriteArgs = [
-            sprite,
-            frame * 32, 0, 32, 32,
-            0, 0, 32, 32,
-          ]
-          break
-      }
-
-      // this.images.character, 0, 0)
-      const textPos = {
-        x: player.x - labelWidth / 2 - viewport.x,
-        y: player.y - HALF_SPRITE_SIZE - this.layer.fontHeight() - viewport.y,
-      }
-      this.layer
-        .fillStyle("#efefef")
-        .save()
-        .translate(player.x - viewport.x, player.y - viewport.y)
-        .align(0.5, 0.5)
-        .rotate(player.direction * -Math.PI / 4)
-        .drawImage(...spriteArgs)
-        .restore()
-        .fillText(player.name, textPos.x, textPos.y)
+    if (me) {
+      this.renderer.renderPlayer(me, game, this)
+    } else {
+      this.layer.clear("black").fillStyle("white").fillText("Spectator", 0, 0)
+      // this.renderer.renderSpectator(...)
     }
   },
 
