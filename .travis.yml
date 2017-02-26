@@ -2,11 +2,21 @@ language: node_js
 sudo: false
 node_js:
   - stable
+  - "4"
 cache:
-    directories:
-      - node_modules
+  directories:
+    - node_modules
 install:
   - npm install
 script:
   - npm run build-server
   - npm run build-client
+deploy:
+  provider: openshift
+  user: gladius-alpha
+  password:
+    secure: B3VkpqOZMDjW2RktTN1DMQOUt2SOlBluRzYYDDrxIjkAc/LgzTAQGeyeSbDPN0/QVSYwMHemjjTggEj4DH3Bssgi6Pb6cfYXlXRVEVFFncihAtmb1symZ1c1SV7g0RePLIXvypIktCUR7V3PHp5c8dKLF2rG8j5mXaEhf2O6IRLPpr6g24SUIsAVBXb5qkdhUxNbnngybCOUg/xbvXxOLVSi/lU++fz2vFZBf9rbFpGXNd2TLDvDunse5zNEP1nuVED39M/4BjaqZrRmrQ4tVsc6/wyDFJV8gtuwXa8V3A2PE73/LqQkHbR5yoITLYXrAbGmMyuHqR0yOsEhocy3YLFw9ev0LA7tclVQwrOdruqwKwWESdMLMIKlcDb5RE0F5jIzoLwq/Ywv7G0BjAklc5TLQFUZ5gYA7bBPMzeW5BIugdJ4FQB8IJcW6cV9QJWW10B7SLfwX6u31n2Fr3qfeHrT43PVDIIF07ImG/IQJ+4opR8+6AfJ1pr3k44eBVohihHwaK+LQ1w8eS6Qaa6nXApy054lSgbjEzibTbvBh1y6dSzQBJFMzMXprInPQbo5kyFXJ6/1i8Gt7ga15WmuQG37FdhgRZQc0Ebw2jfljunPEjA5OSqzSqTtuQ6j8mMP9M9KrRii0LtA6rHoISmZsIyI7Epm4zGGbpPWfsnEhw4=
+  app: gladius-alpha
+  domain: ''
+  on:
+    repo: lowfriction/gladius
