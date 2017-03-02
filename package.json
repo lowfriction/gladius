@@ -35,7 +35,7 @@
     "build-client": "webpack --config webpack.client.config.js",
     "watch-server": "webpack --watch --config webpack.server.config.js",
     "watch-client": "webpack --watch --config webpack.client.config.js",
-    "start": "babel-node build/main.js"
+    "start": "./node_modules/.bin/babel-node build/main.js"
   },
   "author": "François Vaux, Laurent Zvara, Patrice Blin",
   "license": "MIT"
