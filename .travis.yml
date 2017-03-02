@@ -2,7 +2,7 @@ language: node_js
 sudo: false
 node_js:
   - stable
-  - "4"
+  - '4'
 cache:
   directories:
     - node_modules
@@ -12,10 +12,7 @@ script:
   - npm run build-server
   - npm run build-client
 deploy:
-  provider: openshift
-  user: $DEPLOY_USER
-  password:
-    secure: B3VkpqOZMDjW2RktTN1DMQOUt2SOlBluRzYYDDrxIjkAc/LgzTAQGeyeSbDPN0/QVSYwMHemjjTggEj4DH3Bssgi6Pb6cfYXlXRVEVFFncihAtmb1symZ1c1SV7g0RePLIXvypIktCUR7V3PHp5c8dKLF2rG8j5mXaEhf2O6IRLPpr6g24SUIsAVBXb5qkdhUxNbnngybCOUg/xbvXxOLVSi/lU++fz2vFZBf9rbFpGXNd2TLDvDunse5zNEP1nuVED39M/4BjaqZrRmrQ4tVsc6/wyDFJV8gtuwXa8V3A2PE73/LqQkHbR5yoITLYXrAbGmMyuHqR0yOsEhocy3YLFw9ev0LA7tclVQwrOdruqwKwWESdMLMIKlcDb5RE0F5jIzoLwq/Ywv7G0BjAklc5TLQFUZ5gYA7bBPMzeW5BIugdJ4FQB8IJcW6cV9QJWW10B7SLfwX6u31n2Fr3qfeHrT43PVDIIF07ImG/IQJ+4opR8+6AfJ1pr3k44eBVohihHwaK+LQ1w8eS6Qaa6nXApy054lSgbjEzibTbvBh1y6dSzQBJFMzMXprInPQbo5kyFXJ6/1i8Gt7ga15WmuQG37FdhgRZQc0Ebw2jfljunPEjA5OSqzSqTtuQ6j8mMP9M9KrRii0LtA6rHoISmZsIyI7Epm4zGGbpPWfsnEhw4=
+  provider: heroku
   app: $DEPLOY_APP_NAME
-  domain: $DEPLOY_DOMAIN_NAME
-  on: master
+  api_key:
+    secure: Do3xXCGQIl5W4SucO3IbTZyjLB4l1OyWLtbCvFfGh9jGMWFp9SiI0DHoLLOt8HBntnUNRzljc66ON4P5OWXkD/Q+/9bkSQnYw8accrzkd9Hf5nuJBqcvIfhgkVycsU37wWQ0V6v19GfJCfz89RYSt+m4PD+pbLQONQdVZWogDpMdH3zThhn4S710sBzk3gXhLtaMtbjXwTqZmF+mQSn2nnYj43z2tW81UpMIgT3vzIMGn0a9AAL0scKc3IbjVdAFgRXzdqb3lK582jpwwi37lY5a2uB7ZlUXXKqaGTi8Vm37KQT/6NC/xT5hnwOuzXHjE7mQAubre6voKXgsqZ98exAlzq/VotAScGhH6Zy/R2UB8ehreBBWBeNs7fqe6m5OIFeY8ZyxjnrEATuFAFxd+lrhX6nZTXNTRNV06JryRq/GTFCnizuRZwlQ6RZbfp7MPbcb68tj2Ve1I/WWYRqxy7gwaop6m0pMevx/7CcX5k8IDNOk1fXu/HGHuXqywF2WVDVMX4fHjsgaU25QWqJJfMlUnlBQfj56vz9BZ1eAHTDfKNnyv+wekVxFaAZ9GYIHR+qNZBE7xMyAOLDhC98KB82q4PZn4kFvJ7j5Dlz58cMnhHalX+7jfbXpYAEMzwKtcelIijlXAv/4zhbJ7ltyBOh5Y1xK0bJ9r9FeXjYce7Y=
