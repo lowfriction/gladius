@@ -16,7 +16,6 @@
     "babel-eslint": "^4.1.7",
     "babel-loader": "^5.3.2",
     "css-loader": "^0.15.5",
-    "cssnext-loader": "^1.0.1",
     "escope": "<=3.3.0",
     "eslint-loader": "^0.14.2",
     "file-loader": "^0.8.4",
